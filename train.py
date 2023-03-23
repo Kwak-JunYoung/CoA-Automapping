@@ -6,7 +6,7 @@ def calc_accuracy(X,Y):
     train_acc = (max_indices == Y).sum().data.cpu().numpy()/max_indices.size()[0]
     return train_acc
 
-def model_train(model, config, train_dataloader, test_dataloader, scheduler):
+def model_train(model, config, train_dataloader, test_dataloader, scheduler, device):
     num_epochs = config["train_config"]["num_epochs"]
     optimizer = config["train_config"]["optimizer"]
     log_interval = config["train_config"]["log_interval"]
