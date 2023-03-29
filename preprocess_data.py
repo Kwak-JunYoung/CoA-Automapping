@@ -16,8 +16,15 @@ def get_dist_info(
     for i in range(len(dist_list)):
         dist_dict[dist_list[i]] = i
 
+    # print(dist_dict)
     return dist_dict
 
+
+"""
+To-do
+1. Inplacing dist-accnt with that from dist_dict
+2. Have that to be a copy of originalDf
+"""
 def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     # comp, abs, plain, part
     # This data will have headers as mentioned below
@@ -37,7 +44,10 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     # List-ified independent distribution accounts
     # Enumerating dist-accnt by using .index will do the trick
     dist_dict = get_dist_info(originalDf=originalDf)
-    originalDf["공시용계정"] = originalDf["공시용계정"].map(dist_dict)
+
+    # inplacing dist-accnt with that from dist_dict
+    copiedDf = originalDf.copy()
+    copiedDf["공시용계정"] = copiedDf["공시용계정"].map(dist_dict)
 
     usecols = []
 
@@ -52,21 +62,19 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     elif preprocess_type == "part_admin_dis":
         usecols = part_admin_dis_headers                
 
-    df = pd.read_excel(os.path.join(data_path, file_name), usecols=usecols)
-
     # drop_duplicates?  
 
     # Usage of side information will be dealt in main.py
     if preprocess_type == "company_admin":
-        df.to_excel(os.path.join(data_path, "company_admin_df.xlsx"), index=False)
+        copiedDf.loc[:,company_admin_headers].to_excel(os.path.join(data_path, "company_admin_df.xlsx"), index=False)
     elif preprocess_type == "comp_admin_dis":
-        df.to_excel(os.path.join(data_path, "comp_admin_dis_df.xlsx"), index=False)
+        copiedDf.loc[:,comp_admin_dis_headers].to_excel(os.path.join(data_path, "comp_admin_dis_df.xlsx"), index=False)
     elif preprocess_type == "abs_admin_dis":
-        df.to_excel(os.path.join(data_path, "abs_admin_dis_df.xlsx"), index=False)
+        copiedDf.loc[:,abs_admin_dis_headers].to_excel(os.path.join(data_path, "abs_admin_dis_df.xlsx"), index=False)
     elif preprocess_type == "plain_admin_dis":
-        df.to_excel(os.path.join(data_path, "plain_admin_dis_df.xlsx"), index=False)
+        copiedDf.loc[:,plain_admin_dis_headers].to_excel(os.path.join(data_path, "plain_admin_dis_df.xlsx"), index=False)
     elif preprocess_type == "part_admin_dis":
-        df.to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
+        copiedDf.loc[:,part_admin_dis_headers].to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
 
 if __name__ == "__main__":
     file_name = "SamilCoA2023(2).xlsx"
