@@ -197,7 +197,7 @@ if __name__ == '__main__':
         "--num_classes", type=float, default=375, help="Number of categories to be classified"
     )
     parser.add_argument(
-        "--preprocess_type", type == str, default="plain_admin_dis", help="preprocess type"
+        "--preprocess_type", type = str, default="plain_admin_dis", help="preprocess type"
     )
 
     base_cfg_file = PathManager.open("configs/example.yaml", "r")
