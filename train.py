@@ -42,3 +42,5 @@ def model_train(model, config, train_dataloader, test_dataloader, scheduler, dev
             out = model(token_ids, valid_length, segment_ids)
             test_acc += calc_accuracy(out, label)
         print("epoch {} test acc {}".format(e+1, test_acc / (batch_id+1)))
+    
+    return model
