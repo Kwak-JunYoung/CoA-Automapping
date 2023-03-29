@@ -48,7 +48,8 @@ def main(config):
     model_name = config.model_name
     data_name = config.data_name
     preprocess_type = config.preprocess_type
-    data_path = './data/{}_df.xlsx'.format(preprocess_type)
+    print(f'preprocess_type: {preprocess_type}')
+    data_path = './data/{}/{}_df.xlsx'.format(data_name, preprocess_type)
 
     train_config = config.train_config
 
