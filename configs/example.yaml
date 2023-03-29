@@ -9,8 +9,6 @@ train_config:
   learning_rate: 0.00005
 
   optimizer: adam
-  
-  loss: BCE
 
 cad4da_config:
   hidden_size: 768
