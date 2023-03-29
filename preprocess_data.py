@@ -6,13 +6,14 @@ BASE_PATH = "./data"
 
 # 공시용계정과, 그의 번호
 def get_dist_info(
-    data_path,
-    file_name
+    originalDf
 ):
-    df_dis = pd.read_excel(os.path.join(data_path, file_name), usecols=["공시용계정"]).drop_na(inplace=True).drop_duplicates(subset=["공시용계정"], keep="first", inplace=True)
-    df_dis["idx"] = [i for i in range(len(df_dis))]
-    print(df_dis)
-    return df_dis
+    dist_df = pd.DataFrame()
+    dist_df["공시용계정"] = originalDf["공시용계정"].drop_duplicates(keep="first")
+
+    dist_df["enum"] = [i for i in range(len(dist_df["공시용계정"]))] 
+
+    return dist_df
 
 def prepare_samilCoA(data_name: str, preprocess_type: str):
     # comp, abs, plain, part
@@ -27,10 +28,13 @@ def prepare_samilCoA(data_name: str, preprocess_type: str):
     abs_admin_dis_headers = ["index", "관리계정", "공시용계정", "회사명"]
     plain_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
-
-    if "admin_dis" in preprocess_type:
-        df_dis = pd.read_excel(os.path.join(data_path, file_name), usecols=["공시용계정"]).drop_na(inplace=True).drop_duplicates(subset=["공시용계정"], keep="first", inplace=True)
     
+    originalDf = pd.read_excel(os.path.join(data_path, file_name))
+    originalDf.loc[:,["계정과목", "관리계정", "공시용계정"]].replace(" ", "")
+
+    # Dist accnt needs to be enumerated
+    dist_enum = get_dist_info(originalDf=originalDf)
+
     usecols = []
 
     if preprocess_type == "company_admin":
@@ -46,10 +50,8 @@ def prepare_samilCoA(data_name: str, preprocess_type: str):
 
     df = pd.read_excel(os.path.join(data_path, file_name), usecols=usecols)
 
-    # drop_duplicates?
+    # drop_duplicates?  
 
-    # Dist accnt needs to be enumerated
-    
     # Usage of side information will be dealt in main.py
     if preprocess_type == "company_admin":
         df.to_excel(os.path.join(data_path, "company_admin_df.xlsx"), index=False)
