@@ -133,4 +133,4 @@ data/
 
 .DS_Store
 
-toy.iypnb
+*.ipynb
