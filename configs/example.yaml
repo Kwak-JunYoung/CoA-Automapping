@@ -7,9 +7,6 @@ train_config:
   num_epochs: 10
   max_grad_norm: 1
   learning_rate: 0.00005
-
-  optimizer: adam
-
 cad4da_config:
   hidden_size: 768
   num_classes: 375
