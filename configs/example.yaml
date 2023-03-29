@@ -12,3 +12,6 @@ train_config:
   
   loss: BCE
 
+cad4da_config:
+  hidden_size: 768
+  num_classes: 375
