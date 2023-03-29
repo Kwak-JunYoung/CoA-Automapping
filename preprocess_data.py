@@ -22,7 +22,7 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     # comp, abs, plain, part
     # This data will have headers as mentioned below
     # headers = ["계정코드", "회사계정", "1차번역", "계정과목", "관리계정", "공시용계정", "합산계정", "분류", "구분", "회사명", ]
-    comp_admin_headers = ["계정코드", "1차번역", "관리계정"]
+    company_admin_headers = ["계정코드", "1차번역", "관리계정"]
 
     comp_admin_dis_headers = ["comparative_pos", "관리계정", "공시용계정", "회사명"]
     abs_admin_dis_headers = ["index", "관리계정", "공시용계정", "회사명"]
@@ -42,7 +42,7 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     usecols = []
 
     if preprocess_type == "company_admin":
-        usecols = comp_admin_headers
+        usecols = company_admin_headers
     elif preprocess_type == "abs_admin_dis":
         usecols = abs_admin_dis_headers
     elif preprocess_type == "comp_admin_dis":
