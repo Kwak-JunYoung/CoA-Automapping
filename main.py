@@ -55,7 +55,6 @@ def main(config):
 
     batch_size = train_config.batch_size
     learning_rate = train_config.learning_rate
-    optimizer = train_config.optimizer
     max_len = train_config.max_len
     warmup_ratio = train_config.warmup_ratio
     log_interval = train_config.log_interval
@@ -147,7 +146,7 @@ def main(config):
         optimizer, num_warmup_steps=warmup_step, num_training_steps=t_total)
 
     trained_model = model_train(model, config, train_dataloader,
-                                test_dataloader, scheduler, device, loss_fn)
+                                test_dataloader, scheduler, device, loss_fn, optimizer)
 
     trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
 
