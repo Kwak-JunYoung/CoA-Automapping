@@ -31,9 +31,10 @@ import yaml
 device = torch.device("cuda:0")
 bertmodel, vocab = get_pytorch_kobert_model()
 
+os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 # 정확도 측정을 위한 함수 정의
-
-
 def calc_accuracy(X, Y):
     max_vals, max_indices = torch.max(X, 1)
     train_acc = (max_indices == Y).sum().data.cpu().numpy() / \
