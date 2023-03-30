@@ -177,7 +177,7 @@ if __name__ == '__main__':
         "--warmup_ratio", type=float, default=0.1, help="warmup ratio"
     )
     parser.add_argument(
-        "--num_epochs", type=float, default=5, help="number of epochs"
+        "--num_epochs", type=int, default=10, help="number of epochs"
     )
     parser.add_argument(
         "--max_grad_norm", type=float, default=1, help="max grad norm"
