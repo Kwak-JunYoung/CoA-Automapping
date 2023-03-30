@@ -94,15 +94,12 @@ def main(config):
     elif preprocess_type == "plain_admin_dis":
         q_list = df['계정코드'] + " " + df['관리계정']
         l_list = df['공시용계정']
+    elif preprocess_type == "admin_dis":
+        q_list = df['관리계정']
+        l_list = df['공시용계정']
     """
     To-do
-    1. preprocess_type에 따라서 데이터를 불러오는 방식을 다르게 해야함.
-    2. objective2_data는 데이터프레임이고, objective2_data['관리계정']은 시리즈임.
-    3. 시리즈를 리스트로 바꾸는 방법은 objective2_data['관리계정'].tolist()임.
-    4. 시리즈를 리스트로 바꾸고, 리스트를 문자열로 바꾸는 방법은 objective2_data['관리계정'].tolist()[0]임.
-    5. 시리즈를 리스트로 바꾸고, 리스트를 문자열로 바꾸고, 문자열을 리스트로 바꾸는 방법은 objective2_data['관리계정'].tolist()[0].split()임.
-    6. 시리즈를 리스트로 바꾸고, 리스트를 문자열로 바꾸고, 문자열을 리스트로 바꾸고, 리스트를 문자열로 바꾸는 방법은 objective2_data['관리계정'].tolist()[0].split()[0]임.
-    7. 시리즈를 리스트로 바꾸고, 리스트를 문자열로 바꾸고, 문자열을 리스트로 바꾸고, 리스트를 문자열로 바꾸고, 문자열을 리스트로 바꾸는 방법은 objective2_data['관리계정'].tolist()[0].split()[0].split()임.
+
     """
 
     for q, label in zip(q_list, l_list):
@@ -198,7 +195,7 @@ if __name__ == '__main__':
         "--num_classes", type=float, default=375, help="Number of categories to be classified"
     )
     parser.add_argument(
-        "--preprocess_type", type = str, default="plain_admin_dis", help="preprocess type"
+        "--preprocess_type", type = str, default="admin_dis", help="preprocess type"
     )
 
     base_cfg_file = PathManager.open("configs/example.yaml", "r")
