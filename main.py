@@ -79,20 +79,20 @@ def main(config):
 
     # Confirm string concatenation of that from two columns
     if preprocess_type == "abs_admin_dis":
-        q_list = df['index'] + " " + df['관리계정']
+        q_list = df['index'].astype(str) + " " + df['관리계정']
         l_list = ['공시용계정']
     elif preprocess_type == "comp_admin_dis":
-        q_list = df['comparative_pos'] + " " + df['관리계정']
+        q_list = df['comparative_pos'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
     elif preprocess_type == "company_admin":
-        q_list = df['계정코드'] + " " + df['1차번역']
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
         l_list = df['관리계정']
     elif preprocess_type == "part_admin_dis":
         # Confirm indexing being applied to all the cells in a row
-        q_list = df['계정코드'] + " " + df['관리계정']
+        q_list = df['계정코드'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
     elif preprocess_type == "plain_admin_dis":
-        q_list = df['계정코드'] + " " + df['관리계정']
+        q_list = df['계정코드'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
     elif preprocess_type == "admin_dis":
         q_list = df['관리계정']
