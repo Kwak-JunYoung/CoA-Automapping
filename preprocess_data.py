@@ -35,6 +35,7 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     abs_admin_dis_headers = ["index", "관리계정", "공시용계정", "회사명"]
     plain_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
+    admin_dis_headers = ["관리계정", "공시용계정", "회사명"]
     
     originalDf = pd.read_excel(os.path.join(data_path, file_name))
     originalDf["공시용계정"] = originalDf["공시용계정"].str.replace(' ', '')
@@ -60,7 +61,9 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     elif preprocess_type == "plain_admin_dis":
         usecols = plain_admin_dis_headers
     elif preprocess_type == "part_admin_dis":
-        usecols = part_admin_dis_headers                
+        usecols = part_admin_dis_headers
+    elif preprocess_type == "admin_dis":
+        usecols = admin_dis_headers
 
     # drop_duplicates?  
 
@@ -75,6 +78,8 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
         copiedDf.loc[:,plain_admin_dis_headers].to_excel(os.path.join(data_path, "plain_admin_dis_df.xlsx"), index=False)
     elif preprocess_type == "part_admin_dis":
         copiedDf.loc[:,part_admin_dis_headers].to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
+    elif preprocess_type == "admin_dis":
+        copiedDf.loc[:,admin_dis_headers].to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
 
 if __name__ == "__main__":
     file_name = "SamilCoA2023(2).xlsx"
