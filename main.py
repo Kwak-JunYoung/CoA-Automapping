@@ -146,7 +146,7 @@ def main(config):
     trained_model = model_train(model, config, train_dataloader,
                                 test_dataloader, scheduler, device, loss_fn, optimizer)
 
-    trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
+    # trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
 
 
 
