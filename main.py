@@ -31,6 +31,9 @@ import yaml
 device = torch.device("cuda:0")
 bertmodel, vocab = get_pytorch_kobert_model()
 
+tokenizer = get_tokenizer()
+tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -49,6 +52,7 @@ def main(config):
     model_name = config.model_name
     data_name = config.data_name
     preprocess_type = config.preprocess_type
+    will_test = config.test
     print(f'preprocess_type: {preprocess_type}')
     data_path = './data/{}/{}_df.xlsx'.format(data_name, preprocess_type)
 
@@ -78,7 +82,7 @@ def main(config):
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
 
     # Confirm string concatenation of that from two columns
-    if preprocess_type == "abs_admin_dis":
+    if preprocess_type == "abs_admin_dis": ##
         q_list = df['index'].astype(str) + " " + df['관리계정']
         l_list = ['공시용계정']
     elif preprocess_type == "comp_admin_dis":
@@ -87,8 +91,8 @@ def main(config):
     elif preprocess_type == "company_admin":
         q_list = df['계정코드'].astype(str) + " " + df['1차번역']
         l_list = df['관리계정']
-    elif preprocess_type == "part_admin_dis":
-        # Confirm indexing being applied to all the cells in a row
+    elif preprocess_type == "part_admin_dis": ##
+        # Confirm slicing being applied to all the cells in a row
         q_list = df['계정코드'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
     elif preprocess_type == "plain_admin_dis":
@@ -111,9 +115,6 @@ def main(config):
 
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
-
-    tokenizer = get_tokenizer()
-    tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
 
     data_train = BERTDataset(dataset_train, 0, 1, tok, max_len, True, False)
     data_test = BERTDataset(dataset_test, 0, 1, tok, max_len, True, False)
@@ -146,8 +147,42 @@ def main(config):
     trained_model = model_train(model, config, train_dataloader,
                                 test_dataloader, scheduler, device, loss_fn, optimizer)
 
+    return trained_model
     # trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
 
+def predict(predict_sentence, model, config, dist_dict_df):
+
+    train_config = config.train_config
+    batch_size = train_config.batch_size
+    max_len = train_config.max_len
+
+    data = [predict_sentence, '0']
+    dataset_another = [data]
+
+    another_test = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
+    test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
+    
+    model.eval()
+
+    for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
+        token_ids = token_ids.long().to(device)
+        segment_ids = segment_ids.long().to(device)
+
+        valid_length= valid_length
+        label = label.long().to(device)
+
+        out = model(token_ids, valid_length, segment_ids)
+
+
+        test_eval=[]
+        for i in out:
+            logits=i
+            logits = logits.detach().cpu().numpy()
+            test_eval.append(np.argmax(logits))
+            
+        print(dist_dict_df['공시용계정'][test_eval[0] - 1])
+        # Output needs to be settled. Additional coding needs to be done in preprocess_data by creating an excel sheet that has info about dis_enums.
+        # print(test_eval[0])
 
 
 if __name__ == '__main__':
@@ -197,6 +232,9 @@ if __name__ == '__main__':
     parser.add_argument(
         "--preprocess_type", type = str, default="admin_dis", help="preprocess type"
     )
+    parser.add_argument(
+        "--will_test", type=str, default="false", help="will the model be tested manually"
+    )
 
     base_cfg_file = PathManager.open("configs/example.yaml", "r")
     base_cfg = yaml.safe_load(base_cfg_file)
@@ -208,6 +246,7 @@ if __name__ == '__main__':
     cfg.model_name = args.model_name
     cfg.data_name = args.data_name
     cfg.preprocess_type = args.preprocess_type
+    cfg.will_test = args.will_test
 
     cfg.train_config.batch_size = int(args.batch_size)
     cfg.train_config.learning_rate = args.learning_rate
@@ -223,4 +262,15 @@ if __name__ == '__main__':
 
     cfg.freeze()
 
-    main(cfg)
+    trained_model = main(cfg)
+
+    if(cfg.will_test == "true"):
+        #질문 무한반복하기! 0 입력시 종료
+        dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(cfg.data_name), sheet_name='Sheet1')
+        end = 1
+        while end == 1 :
+            sentence = input("하고싶은 말을 입력해주세요 : ")
+            if sentence == 0 :
+                break
+            predict(sentence, trained_model, cfg, dist_dict_df)
+            print("\n")
