@@ -16,6 +16,9 @@ def get_dist_info(
     for i in range(len(dist_list)):
         dist_dict[dist_list[i]] = i
 
+    dist_dict_df = pd.DataFrame(data=dist_dict, index=[0])
+    dist_dict_df = (dist_dict_df.T)
+    dist_dict_df.to_excel('dist_dict.xlsx')
     # print(dist_dict)
     return dist_dict
 
@@ -49,6 +52,9 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     # inplacing dist-accnt with that from dist_dict
     copiedDf = originalDf.copy()
     copiedDf["공시용계정"] = copiedDf["공시용계정"].map(dist_dict)
+    
+
+    # Dictionary to excel
 
     usecols = []
 
@@ -79,7 +85,7 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
     elif preprocess_type == "part_admin_dis":
         copiedDf.loc[:,part_admin_dis_headers].to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
     elif preprocess_type == "admin_dis":
-        copiedDf.loc[:,admin_dis_headers].to_excel(os.path.join(data_path, "part_admin_dis_df.xlsx"), index=False)
+        copiedDf.loc[:,admin_dis_headers].to_excel(os.path.join(data_path, "admin_dis_df.xlsx"), index=False)
 
 if __name__ == "__main__":
     file_name = "SamilCoA2023(2).xlsx"
