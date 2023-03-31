@@ -52,7 +52,7 @@ def main(config):
     model_name = config.model_name
     data_name = config.data_name
     preprocess_type = config.preprocess_type
-    will_test = config.test
+    will_test = config.will_test
     print(f'preprocess_type: {preprocess_type}')
     data_path = './data/{}/{}_df.xlsx'.format(data_name, preprocess_type)
 
