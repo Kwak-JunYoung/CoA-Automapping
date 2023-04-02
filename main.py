@@ -250,6 +250,7 @@ if __name__ == '__main__':
     cfg.data_name = args.data_name
     cfg.preprocess_type = args.preprocess_type
     cfg.will_test = args.will_test
+    cfg.will_save = args.will_save
 
     cfg.train_config.batch_size = int(args.batch_size)
     cfg.train_config.learning_rate = args.learning_rate
