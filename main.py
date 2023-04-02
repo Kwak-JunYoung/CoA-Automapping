@@ -236,7 +236,7 @@ if __name__ == '__main__':
         "--will_test", type=str, default="false", help="will the model be tested manually"
     )
     parser.add_argument(
-        "--will_test", type=str, default="true", help="Decide whether to save the trained model"
+        "--will_save", type=str, default="true", help="Decide whether to save the trained model"
     )
 
     base_cfg_file = PathManager.open("configs/example.yaml", "r")
