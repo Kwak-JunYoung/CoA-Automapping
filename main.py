@@ -267,6 +267,9 @@ if __name__ == '__main__':
 
     trained_model = main(cfg)
 
+    if(cfg.will_save == "true"):
+        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
+
     if(cfg.will_test == "true"):
         #질문 무한반복하기! 0 입력시 종료
         dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(cfg.data_name), sheet_name='Sheet1')
@@ -278,5 +281,4 @@ if __name__ == '__main__':
             predict(sentence, trained_model, cfg, dist_dict_df)
             print("\n")
     
-    if(cfg.will_save == "true"):
-        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
+
