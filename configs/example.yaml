@@ -8,6 +8,7 @@ train_config:
   max_grad_norm: 1
   learning_rate: 0.00005
   will_test: false
+  will_save: true
 cad4da_config:
   hidden_size: 768
   num_classes: 375
