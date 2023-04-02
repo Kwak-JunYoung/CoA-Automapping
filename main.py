@@ -274,3 +274,6 @@ if __name__ == '__main__':
                 break
             predict(sentence, trained_model, cfg, dist_dict_df)
             print("\n")
+    
+    if(cfg.will_save == "true"):
+        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
