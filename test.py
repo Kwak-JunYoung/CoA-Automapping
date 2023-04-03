@@ -48,7 +48,7 @@ def predict(predict_sentence, model, dist_dict_df):
             logits = logits.detach().cpu().numpy()
             test_eval.append(np.argmax(logits))
             
-        print(dist_dict_df['공시용계정'][test_eval[0] - 1])
+        print(dist_dict_df['공시용계정'][test_eval[0]])
         # Output needs to be settled. Additional coding needs to be done in preprocess_data by creating an excel sheet that has info about dis_enums.
         # print(test_eval[0])
 
