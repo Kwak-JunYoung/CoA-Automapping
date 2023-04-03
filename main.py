@@ -150,40 +150,6 @@ def main(config):
     return trained_model
     # trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
 
-def predict(predict_sentence, model, config, dist_dict_df):
-
-    train_config = config.train_config
-    batch_size = train_config.batch_size
-    max_len = train_config.max_len
-
-    data = [predict_sentence, '0']
-    dataset_another = [data]
-
-    another_test = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
-    test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
-    
-    model.eval()
-
-    for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
-        token_ids = token_ids.long().to(device)
-        segment_ids = segment_ids.long().to(device)
-
-        valid_length= valid_length
-        label = label.long().to(device)
-
-        out = model(token_ids, valid_length, segment_ids)
-
-
-        test_eval=[]
-        for i in out:
-            logits=i
-            logits = logits.detach().cpu().numpy()
-            test_eval.append(np.argmax(logits))
-            
-        print(dist_dict_df['공시용계정'][test_eval[0] - 1])
-        # Output needs to be settled. Additional coding needs to be done in preprocess_data by creating an excel sheet that has info about dis_enums.
-        # print(test_eval[0])
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
