@@ -71,7 +71,7 @@ def main(config):
 
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
-    companyDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
+    companyDf = pd.read_excel('./data/SamilCoA2023/ad.xlsx', sheet_name='Sheet1')
 
     # train & test 데이터로 나누기
     data_list = []
@@ -99,21 +99,21 @@ def main(config):
         l_list = df['공시용계정']
 
     elif preprocess_type == "abs_company_admin": ##
-        q_list = df['index'].astype(str) + " " + companyDf['1차번역']
-        l_list = ['관리계정']
+        q_list = df['index'].astype(str) + " " + df['1차번역']
+        l_list = companyDf[df['관리계정']]
     elif preprocess_type == "comp_company_admin":
-        q_list = df['comparative_pos'].astype(str) + " " + companyDf['1차번역']
-        l_list = df['관리계정']
+        q_list = df['comparative_pos'].astype(str) + " " + df['1차번역']
+        l_list = companyDf[df['관리계정']]
     elif preprocess_type == "part_company_admin": ##
         # Confirm slicing being applied to all the cells in a row
-        q_list = df['계정코드'].astype(str).str[:2] + " " + companyDf['1차번역']
-        l_list = df['관리계정']
+        q_list = df['계정코드'].astype(str).str[:2] + " " + df['1차번역']
+        l_list = companyDf[df['관리계정']]
     elif preprocess_type == "plain_company_admin":
-        q_list = df['계정코드'].astype(str) + " " + companyDf['1차번역'].astype(str)
-        l_list = df['관리계정']
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역'].astype(str)
+        l_list = companyDf[df['관리계정']]
 
     elif preprocess_type == "company_admin":
-        q_list = df['1차번역']
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
         l_list = df['관리계정']
     elif preprocess_type == "admin_dis":
         q_list = df['관리계정']
