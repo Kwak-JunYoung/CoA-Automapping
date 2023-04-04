@@ -27,7 +27,7 @@ from utils.config import ConfigNode as CN
 import argparse
 
 import yaml
-from test import predict
+# from test import predict
 
 device = torch.device("cuda:0")
 bertmodel, vocab = get_pytorch_kobert_model()
