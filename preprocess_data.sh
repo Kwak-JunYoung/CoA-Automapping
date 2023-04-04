@@ -1,4 +1,4 @@
-data=(company_admin comp_admin_dis abs_admin_dis plain_admin_dis part_admin_dis)
+data=(abs_company_admin comp_company_admin plain_company_admin part_company_admin company_admin)
 
 for d in ${data[@]}; do
     args=(
