@@ -71,7 +71,7 @@ def main(config):
 
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
-    companyDf = pd.read_excel('./data/SamilCoA2023/ad.xlsx', sheet_name='Sheet1')
+    companyDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
 
     # train & test 데이터로 나누기
     data_list = []
