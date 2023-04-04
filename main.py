@@ -27,6 +27,7 @@ from utils.config import ConfigNode as CN
 import argparse
 
 import yaml
+from test import predict
 
 device = torch.device("cuda:0")
 bertmodel, vocab = get_pytorch_kobert_model()
@@ -101,6 +102,24 @@ def main(config):
     elif preprocess_type == "admin_dis":
         q_list = df['관리계정']
         l_list = df['공시용계정']
+
+    elif preprocess_type == "abs_company_admin": ##
+        q_list = df['index'].astype(str) + " " + df['1차번역']
+        l_list = ['관리계정']
+    elif preprocess_type == "comp_company_admin":
+        q_list = df['comparative_pos'].astype(str) + " " + df['1차번역']
+        l_list = df['관리계정']
+    elif preprocess_type == "company_admin":
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
+        l_list = df['관리계정']
+    elif preprocess_type == "part_company_admin": ##
+        # Confirm slicing being applied to all the cells in a row
+        q_list = df['계정코드'].astype(str).str[:2] + " " + df['1차번역']
+        l_list = df['관리계정']
+    elif preprocess_type == "plain_company_admin":
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
+        l_list = df['관리계정']
+
     """
     To-do
 
@@ -236,6 +255,7 @@ if __name__ == '__main__':
 
     if(cfg.will_save == "true"):
         torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
+        # pickle.dump(trained_model, open("./data/{}/{}_{}_config.pkl".format(cfg.data_name, cfg.model_name, cfg.data_name), "wb"))
 
     if(cfg.will_test == "true"):
         #질문 무한반복하기! 0 입력시 종료
