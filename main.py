@@ -108,7 +108,7 @@ def main(config):
         q_list = df['계정코드'].astype(str).str[:2] + " " + df['1차번역']
         l_list = df['관리계정']
     elif preprocess_type == "plain_company_admin":
-        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
+        q_list = df['계정코드'].astype(str) + " " + df['1차번역'].astype(str)
         l_list = df['관리계정']
 
     elif preprocess_type == "company_admin":
