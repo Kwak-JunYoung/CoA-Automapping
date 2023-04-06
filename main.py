@@ -105,20 +105,20 @@ def main(config):
 
     elif preprocess_type == "abs_company_admin": ##
         q_list = df['index'].astype(str) + " " + df['1차번역']
-        l_list = companyDf[df['관리계정']]
+        l_list = df['관리계정']
     elif preprocess_type == "comp_company_admin":
         q_list = df['comparative_pos'].astype(str) + " " + df['1차번역']
-        l_list = companyDf[df['관리계정']]
+        l_list = df['관리계정']
     elif preprocess_type == "part_company_admin": ##
         # Confirm slicing being applied to all the cells in a row
         q_list = df['계정코드'].astype(str).str[:2] + " " + df['1차번역']
-        l_list = companyDf[df['관리계정']]
+        l_list = df['관리계정']
     elif preprocess_type == "plain_company_admin":
         q_list = df['계정코드'].astype(str) + " " + df['1차번역'].astype(str)
-        l_list = companyDf[df['관리계정']]
+        l_list = df['관리계정']
 
     elif preprocess_type == "company_admin":
-        q_list = df['계정코드'].astype(str) + " " + df['1차번역']
+        q_list = df['1차번역']
         l_list = df['관리계정']
     elif preprocess_type == "admin_dis":
         q_list = df['관리계정']
