@@ -72,7 +72,7 @@ def main(config):
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
     companyDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
-
+    adminDf = pd.read_excel('./data/SamilCoA2023/dist_dict.xlsx', sheet_name='Sheet1')
     # train & test 데이터로 나누기
     data_list = []
 
@@ -83,10 +83,15 @@ def main(config):
     plain_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
 
+    idx_company_dict = companyDf.to_dict()['관리계정']
+    company_idx_dict = {y:x for x, y in idx_company_dict.items()}
+    idx_admin_dict = adminDf.to_dict()['1차번역']
+    admin_idx_dict = {y:x for x, y in idx_admin_dict.items()}    
+
     # Confirm string concatenation of that from two columns
     if preprocess_type == "abs_admin_dis": ##
         q_list = df['index'].astype(str) + " " + df['관리계정']
-        l_list = ['공시용계정']
+        l_list = df['공시용계정']
     elif preprocess_type == "comp_admin_dis":
         q_list = df['comparative_pos'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
@@ -122,14 +127,24 @@ def main(config):
     """
     To-do
 
+    Filling data_list under the condition of preprocess type.
     """
 
-    for q, label in zip(q_list, l_list):
-        data = []
-        data.append(q)
-        data.append(str(label))
+    if "company_admin" in preprocess_type:
+        for q, label in zip(q_list, l_list):
+            data = []
+            data.append(q)
+            data.append(str(admin_idx_dict[label]))
 
-        data_list.append(data)
+            data_list.append(data)
+
+    elif "admin_dis" in preprocess_type:
+        for q, label in zip(q_list, l_list):
+            data = []
+            data.append(q)
+            data.append(str(company_idx_dict[label]))
+
+            data_list.append(data)
 
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
@@ -256,15 +271,15 @@ if __name__ == '__main__':
         torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
         # pickle.dump(trained_model, open("./data/{}/{}_{}_config.pkl".format(cfg.data_name, cfg.model_name, cfg.data_name), "wb"))
 
-    if(cfg.will_test == "true"):
-        #질문 무한반복하기! 0 입력시 종료
-        dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(cfg.data_name), sheet_name='Sheet1')
-        end = 1
-        while end == 1 :
-            sentence = input("하고싶은 말을 입력해주세요 : ")
-            if sentence == 0 :
-                break
-            predict(sentence, trained_model, cfg, dist_dict_df)
-            print("\n")
+    # if(cfg.will_test == "true"):
+    #     #질문 무한반복하기! 0 입력시 종료
+    #     dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(cfg.data_name), sheet_name='Sheet1')
+    #     end = 1
+    #     while end == 1 :
+    #         sentence = input("하고싶은 말을 입력해주세요 : ")
+    #         if sentence == 0 :
+    #             break
+    #         predict(sentence, trained_model, cfg, dist_dict_df)
+    #         print("\n")
     
 
