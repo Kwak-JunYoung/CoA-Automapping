@@ -12,7 +12,6 @@ def get_dist_info(
 ):
     dist_list = originalDf["공시용계정"].drop_duplicates(keep="first").to_list()
     dist_dict = {}
-    print(len(dist_list))
     for i in range(len(dist_list)):
         dist_dict[dist_list[i]] = i
 
@@ -27,7 +26,7 @@ def get_admin_info(
 ):
     admin_list = originalDf["관리계정"].drop_duplicates(keep="first").to_list()
     admin_dict = {}
-    print(len(admin_list))
+    # print(len(admin_list))
     for i in range(len(admin_list)):
         admin_dict[admin_list[i]] = i
 
@@ -68,40 +67,10 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
 
     # List-ified independent distribution accounts
     # Enumerating dist-accnt by using .index will do the trick
-    dist_dict = get_dist_info(originalDf=originalDf)
 
     # inplacing dist-accnt with that from dist_dict
     copiedDf = originalDf.copy()
-    copiedDf["공시용계정"] = copiedDf["공시용계정"].map(dist_dict)
-    
-
-    # Dictionary to excel
-
-    usecols = []
-
-    if preprocess_type == "company_admin":
-        usecols = company_admin_headers
-    elif preprocess_type == "abs_admin_dis":
-        usecols = abs_admin_dis_headers
-    elif preprocess_type == "comp_admin_dis":
-        usecols = comp_admin_dis_headers
-    elif preprocess_type == "plain_admin_dis":
-        usecols = plain_admin_dis_headers
-    elif preprocess_type == "part_admin_dis":
-        usecols = part_admin_dis_headers
-    elif preprocess_type == "admin_dis":
-        usecols = admin_dis_headers
-
-    elif preprocess_type == "abs_company_admin":
-        usecols = abs_company_admin_headers
-    elif preprocess_type == "comp_company_admin":
-        usecols = comp_company_admin_headers
-    elif preprocess_type == "plain_company_admin":
-        usecols = plain_company_admin_headers
-    elif preprocess_type == "part_company_admin":
-        usecols = part_company_admin_headers
-    elif preprocess_type == "company_admin":
-        usecols = company_admin_headers
+    # copiedDf["공시용계정"] = copiedDf["공시용계정"].map(dist_dict)
 
     # drop_duplicates?  
 
@@ -140,6 +109,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     originalDf = pd.read_excel(os.path.join(data_path, file_name))
+    originalDf["공시용계정"] = originalDf["공시용계정"].str.replace(' ', '')
+    originalDf["계정과목"] = originalDf["계정과목"].str.replace(' ', '')
+    originalDf["관리계정"] = originalDf["관리계정"].str.replace(' ', '')
 
     # Dist accnt needs to be enumerated
     dist_dict = get_dist_info(originalDf=originalDf)
@@ -147,4 +119,4 @@ if __name__ == "__main__":
 
     # print(dist_dict)
 
-    prepare_samilCoA(file_name=file_name, data_path=data_path, preprocess_type=args.preprocess_type)
+    # prepare_samilCoA(file_name=file_name, data_path=data_path, preprocess_type=args.preprocess_type)
