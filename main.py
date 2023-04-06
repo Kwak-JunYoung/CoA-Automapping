@@ -71,8 +71,8 @@ def main(config):
 
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
-    companyDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
-    adminDf = pd.read_excel('./data/SamilCoA2023/dist_dict.xlsx', sheet_name='Sheet1')
+    adminDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
+    distDf = pd.read_excel('./data/SamilCoA2023/dist_dict.xlsx', sheet_name='Sheet1')
     # train & test 데이터로 나누기
     data_list = []
 
@@ -83,10 +83,10 @@ def main(config):
     plain_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
 
-    idx_company_dict = companyDf.to_dict()['관리계정']
-    company_idx_dict = {y:x for x, y in idx_company_dict.items()}
-    idx_admin_dict = adminDf.to_dict()['1차번역']
-    admin_idx_dict = {y:x for x, y in idx_admin_dict.items()}    
+    idx_admin_dict = adminDf.to_dict()['관리계정']
+    admin_idx_dict = {y:x for x, y in idx_admin_dict.items()}
+    idx_dist_dict = distDf.to_dict()['공시용계정']
+    dist_idx_dict = {y:x for x, y in idx_dist_dict.items()}  
 
     # Confirm string concatenation of that from two columns
     if preprocess_type == "abs_admin_dis": ##
