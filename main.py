@@ -132,9 +132,8 @@ def main(config):
 
     if "company_admin" in preprocess_type:
         for q, label in zip(q_list, l_list):
-            print(q, label)
             data = []
-            data.append(q)
+            data.append(str(q))
             data.append(str(admin_idx_dict[label]))
 
             data_list.append(data)
@@ -142,7 +141,7 @@ def main(config):
     elif "admin_dis" in preprocess_type:
         for q, label in zip(q_list, l_list):
             data = []
-            data.append(q)
+            data.append(str(q))
             data.append(str(dist_idx_dict[label]))
 
             data_list.append(data)
