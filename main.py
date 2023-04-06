@@ -69,6 +69,11 @@ def main(config):
     loss_fn = nn.CrossEntropyLoss()
     preprocess_type = config.preprocess_type
 
+    if model_name == "cad4da":
+        cad4da_config = config.cad4da_config
+        num_classes = cad4da_config.num_classes
+        hidden_size = cad4da_config.hidden_size
+
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
     adminDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
@@ -158,7 +163,8 @@ def main(config):
         data_test, batch_size=batch_size, num_workers=2)
 
     # BERT 모델 불러오기
-    model = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=config.cad4da_config.num_classes).to(device)
+    # 여기에 hyperparameter: num_classes 추가
+    model = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=num_classes).to(device)
 
     # optimizer와 schedule 설정
     no_decay = ['bias', 'LayerNorm.weight']
