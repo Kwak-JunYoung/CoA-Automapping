@@ -232,7 +232,7 @@ if __name__ == '__main__':
         "--hidden_size", type=float, default=768, help="hidden size"
     )
     parser.add_argument(
-        "--num_classes", type=float, default=375, help="Number of categories to be classified"
+        "--num_classes", type=int, default=375, help="Number of categories to be classified"
     )
     parser.add_argument(
         "--preprocess_type", type = str, default="admin_dis", help="preprocess type"
