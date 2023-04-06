@@ -158,7 +158,7 @@ def main(config):
         data_test, batch_size=batch_size, num_workers=2)
 
     # BERT 모델 불러오기
-    model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
+    model = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=config.cad4da_config.num_classes).to(device)
 
     # optimizer와 schedule 설정
     no_decay = ['bias', 'LayerNorm.weight']
