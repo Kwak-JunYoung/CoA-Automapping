@@ -274,7 +274,7 @@ if __name__ == '__main__':
     trained_model = main(cfg)
 
     if(cfg.will_save == "true"):
-        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.data_name))
+        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.preprocess_type, cfg.model_name, cfg.data_name))
         # pickle.dump(trained_model, open("./data/{}/{}_{}_config.pkl".format(cfg.data_name, cfg.model_name, cfg.data_name), "wb"))
 
     # if(cfg.will_test == "true"):
