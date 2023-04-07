@@ -131,7 +131,6 @@ def main(config):
 
     """
     To-do
-
     Filling data_list under the condition of preprocess type.
     """
 
@@ -185,7 +184,6 @@ def main(config):
 
     trained_model = model_train(model, config, train_dataloader,
                                 test_dataloader, scheduler, device, loss_fn, optimizer)
-    print(localtime(time.time()) - tm)
     return trained_model
     # trained_model.save_pretrained(f"./{model_name}_{data_name}_model")
 
