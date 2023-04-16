@@ -136,3 +136,7 @@ data/
 *.ipynb
 dummy.py
 *.sh
+
+/trained_results
+
+*.pt
