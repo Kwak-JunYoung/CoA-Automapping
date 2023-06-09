@@ -100,7 +100,7 @@ def prepare_samilCoA(file_name: str, data_path: str, preprocess_type: str):
         copiedDf.loc[:,company_admin_headers].to_excel(os.path.join(data_path, "company_admin_df.xlsx"), index=False)
 
 if __name__ == "__main__":
-    file_name = "SamilCoA2023(2).xlsx"
+    file_name = "SamilCoA2023(3).xlsx"
     data_name = "SamilCoA2023"
     data_path = os.path.join(BASE_PATH, data_name)
 
@@ -119,4 +119,4 @@ if __name__ == "__main__":
 
     # print(dist_dict)
 
-    # prepare_samilCoA(file_name=file_name, data_path=data_path, preprocess_type=args.preprocess_type)
+    prepare_samilCoA(file_name=file_name, data_path=data_path, preprocess_type=args.preprocess_type)
