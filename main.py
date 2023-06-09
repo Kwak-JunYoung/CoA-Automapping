@@ -10,8 +10,13 @@ import numpy as np
 from tqdm import tqdm, tqdm_notebook
 
 import pandas as pd
-from kobert.utils import get_tokenizer
-from kobert.pytorch_kobert import get_pytorch_kobert_model
+
+# from kobert.utils import get_tokenizer
+from kobert_tokenizer import KoBERTTokenizer
+
+# from kobert.pytorch_kobert import get_pytorch_kobert_model
+from transformers import BertModel
+
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
 
@@ -30,13 +35,19 @@ import yaml
 # from test import predict
 
 device = torch.device("cuda:0")
-bertmodel, vocab = get_pytorch_kobert_model()
+# bertmodel, vocab = get_pytorch_kobert_model()
+model = BertModel.from_pretrained('skt/kobert-base-v1')
 
-tokenizer = get_tokenizer()
+
+# tokenizer = get_tokenizer()
+tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
+
 tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
 
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 
 # 정확도 측정을 위한 함수 정의
 def calc_accuracy(X, Y):
