@@ -36,11 +36,11 @@ import yaml
 
 device = torch.device("cuda:0")
 # bertmodel, vocab = get_pytorch_kobert_model()
-model = BertModel.from_pretrained('skt/kobert-base-v1')
+bertmodel = BertModel.from_pretrained('skt/kobert-base-v1')
 
 
 # tokenizer = get_tokenizer()
-tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+tokenizer = KoBERTTokenizer.from_pretrained('monologg/kobert')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 
 tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
@@ -164,8 +164,8 @@ def main(config):
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
 
-    data_train = BERTDataset(dataset_train, 0, 1, tok, max_len, True, False)
-    data_test = BERTDataset(dataset_test, 0, 1, tok, max_len, True, False)
+    data_train = BERTDataset(dataset_train, 0, 1, tokenizer, max_len, True, False)
+    data_test = BERTDataset(dataset_test, 0, 1, tokenizer, max_len, True, False)
 
     train_dataloader = torch.utils.data.DataLoader(
         data_train, batch_size=batch_size, num_workers=2)
