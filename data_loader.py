@@ -9,7 +9,7 @@ class BERTDataset(Dataset):
         for i in dataset:
             print(i[sent_idx])
             print(type(i[sent_idx]))
-            print(transform([i[sent_idx]]))
+            print(transform(i[sent_idx]))
             print()
 
         self.sentences = [transform(i[sent_idx]) for i in dataset]
