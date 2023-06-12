@@ -165,12 +165,12 @@ def main(config):
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
 
-    data_train = BERTDataset(dataset_train, 0, 1, tok, max_len, True, False)
-    data_test = BERTDataset(dataset_test, 0, 1, tok, max_len, True, False)
+    data_train = BERTDataset(dataset_train, 0, 1, tok, vocab, max_len, True, False)
+    data_test = BERTDataset(dataset_test, 0, 1, tok, vocab, max_len, True, False)
 
-    train_dataloader = torch.utils.data.DataLoader(
+    train_dataloader = DataLoader(
         data_train, batch_size=batch_size, num_workers=2)
-    test_dataloader = torch.utils.data.DataLoader(
+    test_dataloader = DataLoader(
         data_test, batch_size=batch_size, num_workers=2)
 
     # BERT 모델 불러오기
