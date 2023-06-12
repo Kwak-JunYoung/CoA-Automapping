@@ -164,9 +164,9 @@ def main(config):
 
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
-
-    data_train = BERTDataset(dataset_train, 0, 1, tok, vocab, max_len, True, False)
-    data_test = BERTDataset(dataset_test, 0, 1, tok, vocab, max_len, True, False)
+    # def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer, vocab, max_len, pad, pair):
+    data_train = BERTDataset(dataset=dataset_train, sent_idx=0, label_idx=1, bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
+    data_test = BERTDataset(dataset=dataset_test, sent_idx=0, label_idx=1, bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
 
     train_dataloader = DataLoader(
         data_train, batch_size=batch_size, num_workers=2)
