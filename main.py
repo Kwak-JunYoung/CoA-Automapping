@@ -46,7 +46,9 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 
 
 tok = tokenizer.tokenize
-tok.vocab = vocab
+print(dir(tokenizer))
+print(dir(tok))
+
 # tok = tokenizer
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
