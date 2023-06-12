@@ -12,10 +12,11 @@ from tqdm import tqdm, tqdm_notebook
 import pandas as pd
 
 # from kobert.utils import get_tokenizer
-from kobert_transformers import get_tokenizer
-# from kobert_tokenizer import KoBERTTokenizer
-
+# from kobert_transformers import get_tokenizer
 # from kobert.pytorch_kobert import get_pytorch_kobert_model
+
+# Recent
+from kobert_tokenizer import KoBERTTokenizer
 from transformers import BertModel
 
 from transformers import AdamW
@@ -37,14 +38,13 @@ import yaml
 
 device = torch.device("cuda:0")
 # bertmodel, vocab = get_pytorch_kobert_model()
-bertmodel = BertModel.from_pretrained('skt/kobert-base-v1')
+# tokenizer = get_tokenizer()
 
-
-tokenizer = get_tokenizer()
-# tokenizer = KoBERTTokenizer.from_pretrained('monologg/kobert')
+tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 
-tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+tok = tokenizer.tokenize
 # tok = tokenizer
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
