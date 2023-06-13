@@ -50,8 +50,9 @@ def predict(predict_sentence):
 
     batch_size = 64
     max_len = 40
+    # data_test = BERTDataset(dataset=dataset_test, sent_idx=0, label_idx=1, bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
 
-    another_test = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
+    another_test = BERTDataset(dataset_another, 0, 1, tok, vocab, max_len, True, False)
     test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
     
     model_company_admin.eval()
@@ -84,7 +85,7 @@ def predict2(predict_sentence):
     batch_size = 64
     max_len = 40
 
-    another_test = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
+    another_test = BERTDataset(dataset_another, 0, 1, tok, vocab, max_len, True, False)
     test_dataloader = torch.utils.data.DataLoader(another_test, batch_size=batch_size, num_workers=5)
     
     model_admin_dis.eval()
