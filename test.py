@@ -2,8 +2,8 @@ import torch
 import pandas as pd
 from models.cad4da import BERTClassifier
 from data_loader import BERTDataset
-from kobert.pytorch_kobert import get_pytorch_kobert_model
-from kobert.utils import get_tokenizer
+# from kobert.pytorch_kobert import get_pytorch_kobert_model
+# from kobert.utils import get_tokenizer
 import gluonnlp as nlp
 import numpy as np
 import openpyxl
