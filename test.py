@@ -29,8 +29,8 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 
 # bertmodel, vocab = get_pytorch_kobert_model()
 
-
-model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=6674).to(device)
+# parameter로 받아들여보기
+model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=4950).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
 model_company_admin.load_state_dict(torch.load("./train_results/cad4da_abs_company_admin_model.pt", map_location=device))
