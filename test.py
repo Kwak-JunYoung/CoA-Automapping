@@ -33,7 +33,7 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=4950).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
-model_company_admin.load_state_dict(torch.load("./train_results/cad4da_abs_company_admin_model.pt", map_location=device))
+model_company_admin.load_state_dict(torch.load("./train_results/cad4da_plain_company_admin_model.pt", map_location=device))
 model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_abs_admin_dis_model.pt", map_location=device))
 
 
@@ -118,7 +118,7 @@ for index, row in df.iterrows():
     # Access the value in a column
     accntCode = row['계정코드']
     compAccnt = row['회사계정']
-    adminAccnt = predict(row['회사계정'])
+    adminAccnt = predict(accntCode + " " + row['회사계정'])
     compAccnt = predict2(adminAccnt)
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = compAccnt
