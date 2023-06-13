@@ -33,8 +33,8 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=6674).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
-model_company_admin.load_state_dict(torch.load("./train_results/cad4da_company_admin.pt", map_location=device))
-model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_dis.pt", map_location=device))
+model_company_admin.load_state_dict(torch.load("./train_results/cad4da_abs_company_admin_model.pt", map_location=device))
+model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_abs_admin_dis_model.pt", map_location=device))
 
 
 dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
