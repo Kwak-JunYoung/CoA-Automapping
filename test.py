@@ -118,7 +118,7 @@ for index, row in df.iterrows():
     # Access the value in a column
     accntCode = row['계정코드']
     compAccnt = row['회사계정']
-    adminAccnt = predict(accntCode + " " + row['회사계정'])
+    adminAccnt = predict(str(accntCode) + " " + row['회사계정'])
     compAccnt = predict2(adminAccnt)
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = compAccnt
