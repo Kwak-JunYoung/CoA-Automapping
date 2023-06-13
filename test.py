@@ -15,15 +15,19 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # device = torch.device( cuda if torch.cuda.is_available() else cpu )
 device = torch.device("cuda:0")
 
-bertmodel, vocab = get_pytorch_kobert_model()
 
-tokenizer = get_tokenizer()
-tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
-tokenizer = get_tokenizer()
-tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+from transformers import BertModel
+from kobert_tokenizer import KoBERTTokenizer
+tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
+bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
+vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 
-bertmodel, vocab = get_pytorch_kobert_model()
-bertmodel, vocab = get_pytorch_kobert_model()
+# bertmodel, vocab = get_pytorch_kobert_model()
+
+# tokenizer = get_tokenizer()
+# tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+
+# bertmodel, vocab = get_pytorch_kobert_model()
 
 
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=6674).to(device)
@@ -36,8 +40,8 @@ model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_d
 dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
 admin_dict_df = pd.read_excel("./data/{}/admin_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
 #토큰화
-tokenizer = get_tokenizer()
-tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
+
+tok = tokenizer.tokenize
 
 def predict(predict_sentence):
 
