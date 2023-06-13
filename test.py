@@ -110,7 +110,7 @@ def predict2(predict_sentence):
         # print(test_eval[0])
 
     
-df = pd.read_excel('/workspace/CoA-Automapping/houghton.xlsx', sheet_name='Sheet1')
+df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
 
 # Iterate through the rows in the DataFrame
 for index, row in df.iterrows():
@@ -122,4 +122,4 @@ for index, row in df.iterrows():
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = compAccnt
 
-df.to_excel('houghtonResult.xlsx', sheet_name='Sheet1', index=False)
+df.to_excel('./result/houghtonResult.xlsx', sheet_name='Sheet1', index=False)
