@@ -33,8 +33,8 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=4950).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
-model_company_admin.load_state_dict(torch.load("./train_results/cad4da_abs_company_admin_model.pt", map_location=device))
-model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_abs_admin_dis_model.pt", map_location=device))
+model_company_admin.load_state_dict(torch.load("./train_results/cad4da_plain_company_admin_model.pt", map_location=device))
+model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_dis_model.pt", map_location=device))
 
 
 dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
@@ -116,11 +116,12 @@ df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
 # Iterate through the rows in the DataFrame
 for index, row in df.iterrows():
     # Access the value in a column
-    accntCode = row['계정코드']
+    accntCode = row['계정코드'].astype(str)
     compAccnt = row['회사계정']
-    adminAccnt = predict(row['회사계정'])
-    compAccnt = predict2(adminAccnt)
+    adminAccnt = predict(accntCode + " " + compAccnt)
+    compAccnt = predict2(accntCode + " " + adminAccnt)
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = compAccnt
+    # 합산계정, 분류, 구분
 
 df.to_excel('./result/houghtonResult.xlsx', sheet_name='Sheet1', index=False)
