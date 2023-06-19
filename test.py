@@ -9,6 +9,9 @@ import numpy as np
 import openpyxl
 
 import os
+
+import argparse
+
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -30,13 +33,20 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 # bertmodel, vocab = get_pytorch_kobert_model()
 
 # parameter로 받아들여보기
+
+parser = argparse.ArgumentParser(description='Name of company to get the result.')
+parser.add_argument('--dataset', type=str, default='cad4da', help='Name of dataset to get the result.')
+parser.add_argument('--company', type=str, default='(주)하림지주', help='Name of company to get the result.')
+args = parser.parse_args()
+
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=4950).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
 model_company_admin.load_state_dict(torch.load("./train_results/cad4da_plain_company_admin_model.pt", map_location=device))
 model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_dis_model.pt", map_location=device))
 
-dataset_name = "SamilCoA2023"
+dataset_name = args.dataset
+company_name = args.company
 
 dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(dataset_name), sheet_name='Sheet1')
 admin_dict_df = pd.read_excel("./data/{}/admin_dict.xlsx".format(dataset_name), sheet_name='Sheet1')
@@ -119,7 +129,7 @@ def predict3(compAccnt):
         if row[0] == compAccnt:
             return row
 
-df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
+df = pd.read_excel('./target/{}.xlsx'.format(company_name), sheet_name='Sheet1')
 
 # Iterate through the rows in the DataFrame
 for index, row in df.iterrows():
@@ -141,4 +151,4 @@ for index, row in df.iterrows():
 
     # 합산계정, 분류, 구분
 
-df.to_excel('./result/houghtonResult.xlsx', sheet_name='Sheet1', index=False)
+df.to_excel('./result/{}Result.xlsx'.format(company_name), sheet_name='Sheet1', index=False)
