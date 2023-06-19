@@ -122,7 +122,7 @@ def predict3(compAccnt):
             hapsan = row[0]
             boonryu = row[1]
             gooboon = row[2]
-            print(f"Hapsan: {hapsan}, Boonryu: {boonryu}, Gooboon: {gooboon}")    
+
             return row
 
 
@@ -143,6 +143,9 @@ for index, row in df.iterrows():
     df.loc[index, '합산계정'] = ghbgAccnt[0]
     df.loc[index, '분류'] = ghbgAccnt[1]
     df.loc[index, '구분'] = ghbgAccnt[2]
+
+    print("{}, {}, {}, {}, {}, {}, {}".format(accntCode, compAccnt, adminAccnt, compAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
+
     # 합산계정, 분류, 구분
 
 df.to_excel('./result/houghtonResult.xlsx', sheet_name='Sheet1', index=False)
