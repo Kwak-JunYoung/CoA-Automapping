@@ -136,7 +136,7 @@ for index, row in df.iterrows():
     compAccnt = row['회사계정']                                 # 회사계정
     adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
     discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
-    ghbgAccnt = predict3(compAccnt)                             # 합산계정, 분류, 구분
+    ghbgAccnt = predict3(discAccnt)                             # 합산계정, 분류, 구분
 
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = discAccnt
