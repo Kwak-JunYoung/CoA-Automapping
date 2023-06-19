@@ -144,7 +144,7 @@ for index, row in df.iterrows():
     df.loc[index, '분류'] = ghbgAccnt[1]
     df.loc[index, '구분'] = ghbgAccnt[2]
 
-    print("{}, {}, {}, {}, {}, {}, {}".format(accntCode, compAccnt, adminAccnt, compAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
+    print("계정코드: {}\t회사계정: {}\t관리계정: {}\t공시용계정: {}\t합산계정: {}\t분류: {}\t구분: {}".format(accntCode, compAccnt, adminAccnt, compAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
 
     # 합산계정, 분류, 구분
 
