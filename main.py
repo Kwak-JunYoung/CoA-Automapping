@@ -155,7 +155,7 @@ def main(config):
             data = []
             data.append(str(q))
             data.append(str(admin_idx_dict[label]))
-
+            print(data)
             data_list.append(data)
 
     elif "admin_dis" in preprocess_type:
