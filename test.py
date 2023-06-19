@@ -35,7 +35,7 @@ vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_tok
 # parameter로 받아들여보기
 
 parser = argparse.ArgumentParser(description='Name of company to get the result.')
-parser.add_argument('--dataset', type=str, default='cad4da', help='Name of dataset to get the result.')
+parser.add_argument('--dataset', type=str, default='SamilCoA2023', help='Name of dataset to get the result.')
 parser.add_argument('--company', type=str, default='(주)하림지주', help='Name of company to get the result.')
 args = parser.parse_args()
 
