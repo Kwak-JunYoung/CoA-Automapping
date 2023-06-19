@@ -132,14 +132,14 @@ df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
 for index, row in df.iterrows():
     # Access the value in a column
     # Casting modified
-    accntCode = str(row['계정코드'])
-    compAccnt = row['회사계정']
-    adminAccnt = predict(accntCode + " " + compAccnt)
-    discAccnt = predict2(accntCode + " " + adminAccnt)
-    ghbgAccnt = predict3(compAccnt)
+    accntCode = str(row['계정코드'])                            # 계정코드
+    compAccnt = row['회사계정']                                 # 회사계정
+    adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
+    discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
+    ghbgAccnt = predict3(compAccnt)                             # 합산계정, 분류, 구분
 
     df.loc[index, '관리계정'] = adminAccnt
-    df.loc[index, '공시용계정'] = compAccnt
+    df.loc[index, '공시용계정'] = discAccnt
     df.loc[index, '합산계정'] = ghbgAccnt[0]
     df.loc[index, '분류'] = ghbgAccnt[1]
     df.loc[index, '구분'] = ghbgAccnt[2]
