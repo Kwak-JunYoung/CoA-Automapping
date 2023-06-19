@@ -19,7 +19,6 @@ def model_train(model, config, train_dataloader, test_dataloader, scheduler, dev
             optimizer.zero_grad()
             token_ids = token_ids.long().to(device)
             segment_ids = segment_ids.long().to(device)
-            valid_length= valid_length
             label = label.long().to(device)
             out = model(token_ids, valid_length, segment_ids)
             loss = loss_fn(out, label)
@@ -36,9 +35,9 @@ def model_train(model, config, train_dataloader, test_dataloader, scheduler, dev
         for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm_notebook(test_dataloader)):
             token_ids = token_ids.long().to(device)
             segment_ids = segment_ids.long().to(device)
-            valid_length= valid_length
             label = label.long().to(device)
             out = model(token_ids, valid_length, segment_ids)
+            print(out, label)
             test_acc += calc_accuracy(out, label)
         print("epoch {} test acc {}".format(e+1, test_acc / (batch_id+1)))
     

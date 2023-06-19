@@ -42,12 +42,11 @@ device = torch.device("cuda:0")
 
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
-vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
+vocab = nlp.vocab.BERTVocab.from_sentencepiece(
+    tokenizer.vocab_file, padding_token='[PAD]')
 
 
 tok = tokenizer.tokenize
-print(dir(tokenizer))
-print(dir(tok))
 
 # tok = tokenizer
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
@@ -83,7 +82,6 @@ def main(config):
     num_epochs = train_config.num_epochs
     max_grad_norm = train_config.max_grad_norm
     loss_fn = nn.CrossEntropyLoss()
-    preprocess_type = config.preprocess_type
 
     if model_name == "cad4da":
         cad4da_config = config.cad4da_config
@@ -92,8 +90,10 @@ def main(config):
 
     # 전처리된 데이터. 종류는 4가지로 예상.
     df = pd.read_excel(data_path, sheet_name='Sheet1')
-    adminDf = pd.read_excel('./data/SamilCoA2023/admin_dict.xlsx', sheet_name='Sheet1')
-    distDf = pd.read_excel('./data/SamilCoA2023/dist_dict.xlsx', sheet_name='Sheet1')
+    adminDf = pd.read_excel(
+        './data/{}/admin_dict.xlsx'.format(data_name), sheet_name='Sheet1')
+    distDf = pd.read_excel(
+        './data/{}/dist_dict.xlsx'.format(data_name), sheet_name='Sheet1')
     # train & test 데이터로 나누기
     data_list = []
 
@@ -105,18 +105,18 @@ def main(config):
     part_admin_dis_headers = ["계정코드", "관리계정", "공시용계정", "회사명"]
 
     idx_admin_dict = adminDf.to_dict()['관리계정']
-    admin_idx_dict = {y:x for x, y in idx_admin_dict.items()}
+    admin_idx_dict = {y: x for x, y in idx_admin_dict.items()}
     idx_dist_dict = distDf.to_dict()['공시용계정']
-    dist_idx_dict = {y:x for x, y in idx_dist_dict.items()}  
+    dist_idx_dict = {y: x for x, y in idx_dist_dict.items()}
 
     # Confirm string concatenation of that from two columns
-    if preprocess_type == "abs_admin_dis": ##
+    if preprocess_type == "abs_admin_dis":
         q_list = df['index'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
     elif preprocess_type == "comp_admin_dis":
         q_list = df['comparative_pos'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
-    elif preprocess_type == "part_admin_dis": ##
+    elif preprocess_type == "part_admin_dis":
         # Confirm slicing being applied to all the cells in a row
         q_list = df['계정코드'].astype(str).str[:2] + " " + df['관리계정']
         l_list = df['공시용계정']
@@ -124,13 +124,13 @@ def main(config):
         q_list = df['계정코드'].astype(str) + " " + df['관리계정']
         l_list = df['공시용계정']
 
-    elif preprocess_type == "abs_company_admin": ##
+    elif preprocess_type == "abs_company_admin":
         q_list = df['index'].astype(str) + " " + df['1차번역']
         l_list = df['관리계정']
     elif preprocess_type == "comp_company_admin":
         q_list = df['comparative_pos'].astype(str) + " " + df['1차번역']
         l_list = df['관리계정']
-    elif preprocess_type == "part_company_admin": ##
+    elif preprocess_type == "part_company_admin":
         # Confirm slicing being applied to all the cells in a row
         q_list = df['계정코드'].astype(str).str[:2] + " " + df['1차번역']
         l_list = df['관리계정']
@@ -143,7 +143,7 @@ def main(config):
         l_list = df['관리계정']
     elif preprocess_type == "admin_dis":
         q_list = df['관리계정']
-        l_list = df['공시용계정']        
+        l_list = df['공시용계정']
 
     """
     To-do
@@ -155,7 +155,7 @@ def main(config):
             data = []
             data.append(str(q))
             data.append(str(admin_idx_dict[label]))
-            print(data) # Print data
+            
             data_list.append(data)
 
     elif "admin_dis" in preprocess_type:
@@ -169,8 +169,10 @@ def main(config):
     dataset_train, dataset_test = train_test_split(
         data_list, test_size=0.25, random_state=0)
     # def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer, vocab, max_len, pad, pair):
-    data_train = BERTDataset(dataset=dataset_train, sent_idx=0, label_idx=1, bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
-    data_test = BERTDataset(dataset=dataset_test, sent_idx=0, label_idx=1, bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
+    data_train = BERTDataset(dataset=dataset_train, sent_idx=0, label_idx=1,
+                             bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
+    data_test = BERTDataset(dataset=dataset_test, sent_idx=0, label_idx=1,
+                            bert_tokenizer=tok, vocab=vocab, max_len=max_len, pad=True, pair=False)
 
     train_dataloader = DataLoader(
         data_train, batch_size=batch_size, num_workers=2)
@@ -179,7 +181,8 @@ def main(config):
 
     # BERT 모델 불러오기
     # 여기에 hyperparameter: num_classes 추가
-    model = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=num_classes).to(device)
+    model = BERTClassifier(bertmodel,  dr_rate=0.5,
+                           num_classes=num_classes).to(device)
 
     # optimizer와 schedule 설정
     no_decay = ['bias', 'LayerNorm.weight']
@@ -249,7 +252,7 @@ if __name__ == '__main__':
         "--num_classes", type=int, default=375, help="Number of categories to be classified"
     )
     parser.add_argument(
-        "--preprocess_type", type = str, default="admin_dis", help="preprocess type"
+        "--preprocess_type", type=str, default="plain_company_admin", help="preprocess type"
     )
     parser.add_argument(
         "--will_test", type=str, default="false", help="will the model be tested manually"
@@ -287,8 +290,9 @@ if __name__ == '__main__':
 
     trained_model = main(cfg)
 
-    if(cfg.will_save == "true"):
-        torch.save(trained_model.state_dict(), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.preprocess_type))
+    if (cfg.will_save == "true"):
+        torch.save(trained_model.state_dict(
+        ), "./data/{}/{}_{}_model.pt".format(cfg.data_name, cfg.model_name, cfg.preprocess_type))
         # pickle.dump(trained_model, open("./data/{}/{}_{}_config.pkl".format(cfg.data_name, cfg.model_name, cfg.data_name), "wb"))
 
     # if(cfg.will_test == "true"):
@@ -301,5 +305,3 @@ if __name__ == '__main__':
     #             break
     #         predict(sentence, trained_model, cfg, dist_dict_df)
     #         print("\n")
-    
-

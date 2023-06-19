@@ -116,14 +116,8 @@ def predict2(predict_sentence):
 
 # 합산, 분류, 구분 불러오기
 def predict3(compAccnt):
-
     for index, row in ghbg_df.iterrows():
         if row[0] == compAccnt:
-            # Access other values in the same row
-            hapsan = row[0]
-            boonryu = row[1]
-            gooboon = row[2]
-
             return row
 
 
