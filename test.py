@@ -47,7 +47,7 @@ ghbg_df = pd.read_excel("./data/{}/GHBG.xlsx".format(dataset_name), sheet_name='
 tok = tokenizer.tokenize
 
 def predict(predict_sentence):
-
+    print("회->관")
     data = [predict_sentence, '0']
     dataset_another = [data]
 
@@ -76,6 +76,7 @@ def predict(predict_sentence):
             test_eval.append(np.argmax(logits))
 
         # answer = dist_dict_df['공시용계정'][test_eval[0]]
+        print("{} -> {}".format(predict_sentence, test_eval))
         answer = admin_dict_df['관리계정'][test_eval[0]]
         return answer
         # print(test_eval[0])
@@ -133,7 +134,7 @@ for index, row in df.iterrows():
     # Access the value in a column
     # Casting modified
     accntCode = str(row['계정코드'])                            # 계정코드
-    compAccnt = row['회사계정']                                 # 회사계정
+    compAccnt = row['1차번역']                                 # 회사계정
     adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
     discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
     ghbgAccnt = predict3(discAccnt)                             # 합산계정, 분류, 구분
@@ -144,7 +145,7 @@ for index, row in df.iterrows():
     df.loc[index, '분류'] = ghbgAccnt[1]
     df.loc[index, '구분'] = ghbgAccnt[2]
 
-    print("계정코드: {}\t회사계정: {}\t관리계정: {}\t공시용계정: {}\t합산계정: {}\t분류: {}\t구분: {}".format(accntCode, compAccnt, adminAccnt, discAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
+    # print("계정코드: {}\t회사계정: {}\t관리계정: {}\t공시용계정: {}\t합산계정: {}\t분류: {}\t구분: {}".format(accntCode, compAccnt, adminAccnt, discAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
 
     # 합산계정, 분류, 구분
 
