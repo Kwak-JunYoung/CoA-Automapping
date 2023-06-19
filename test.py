@@ -36,9 +36,12 @@ model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(de
 model_company_admin.load_state_dict(torch.load("./train_results/cad4da_plain_company_admin_model.pt", map_location=device))
 model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_dis_model.pt", map_location=device))
 
+dataset_name = "SamilCoA2023"
 
-dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
-admin_dict_df = pd.read_excel("./data/{}/admin_dict.xlsx".format("SamilCoA2023"), sheet_name='Sheet1')
+dist_dict_df = pd.read_excel("./data/{}/dist_dict.xlsx".format(dataset_name), sheet_name='Sheet1')
+admin_dict_df = pd.read_excel("./data/{}/admin_dict.xlsx".format(dataset_name), sheet_name='Sheet1')
+ghbg_df = pd.read_excel("./data/{}/GHBG.xlsx".format(dataset_name), sheet_name='Sheet1')
+
 #토큰화
 
 tok = tokenizer.tokenize
@@ -110,7 +113,19 @@ def predict2(predict_sentence):
         return answer
         # print(test_eval[0])
 
-    
+# 합산, 분류, 구분 불러오기
+def predict3(compAccnt):
+
+    for index, row in ghbg_df.iterrows():
+        if row[0] == compAccnt:
+            # Access other values in the same row
+            hapsan = row[0]
+            boonryu = row[1]
+            gooboon = row[2]
+            print(f"Hapsan: {hapsan}, Boonryu: {boonryu}, Gooboon: {gooboon}")    
+            return row
+
+
 df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
 
 # Iterate through the rows in the DataFrame
@@ -121,8 +136,13 @@ for index, row in df.iterrows():
     compAccnt = row['회사계정']
     adminAccnt = predict(accntCode + " " + compAccnt)
     compAccnt = predict2(accntCode + " " + adminAccnt)
+    ghbgAccnt = predict3(compAccnt)
+
     df.loc[index, '관리계정'] = adminAccnt
     df.loc[index, '공시용계정'] = compAccnt
+    df.loc[index, '합산계정'] = ghbgAccnt[0]
+    df.loc[index, '분류'] = ghbgAccnt[1]
+    df.loc[index, '구분'] = ghbgAccnt[2]
     # 합산계정, 분류, 구분
 
 df.to_excel('./result/houghtonResult.xlsx', sheet_name='Sheet1', index=False)
