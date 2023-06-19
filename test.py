@@ -129,26 +129,28 @@ def predict3(compAccnt):
         if row[0] == compAccnt:
             return row
 
-df = pd.read_excel('./target/{}.xlsx'.format(company_name), sheet_name='Sheet1')
+if __name__ == '__main__':
 
-# Iterate through the rows in the DataFrame
-for index, row in df.iterrows():
-    # Access the value in a column
-    # Casting modified
-    accntCode = str(row['계정코드'])                            # 계정코드
-    compAccnt = row['1차번역']                                 # 회사계정
-    adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
-    discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
-    ghbgAccnt = predict3(discAccnt)                             # 합산계정, 분류, 구분
+    df = pd.read_excel('./target/{}.xlsx'.format(company_name), sheet_name='Sheet1')
 
-    df.loc[index, '관리계정'] = adminAccnt
-    df.loc[index, '공시용계정'] = discAccnt
-    df.loc[index, '합산계정'] = ghbgAccnt[1]
-    df.loc[index, '분류'] = ghbgAccnt[2]
-    df.loc[index, '구분'] = ghbgAccnt[3]
+    # Iterate through the rows in the DataFrame
+    for index, row in df.iterrows():
+        # Access the value in a column
+        # Casting modified
+        accntCode = str(row['계정코드'])                            # 계정코드
+        compAccnt = row['1차번역']                                 # 회사계정
+        adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
+        discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
+        ghbgAccnt = predict3(discAccnt)                             # 합산계정, 분류, 구분
 
-    # print("계정코드: {}\t회사계정: {}\t관리계정: {}\t공시용계정: {}\t합산계정: {}\t분류: {}\t구분: {}".format(accntCode, compAccnt, adminAccnt, discAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
+        df.loc[index, '관리계정'] = adminAccnt
+        df.loc[index, '공시용계정'] = discAccnt
+        df.loc[index, '합산계정'] = ghbgAccnt[1]
+        df.loc[index, '분류'] = ghbgAccnt[2]
+        df.loc[index, '구분'] = ghbgAccnt[3]
 
-    # 합산계정, 분류, 구분
+        # print("계정코드: {}\t회사계정: {}\t관리계정: {}\t공시용계정: {}\t합산계정: {}\t분류: {}\t구분: {}".format(accntCode, compAccnt, adminAccnt, discAccnt, ghbgAccnt[0], ghbgAccnt[1], ghbgAccnt[2]))
 
-df.to_excel('./result/{}Result.xlsx'.format(company_name), sheet_name='Sheet1', index=False)
+        # 합산계정, 분류, 구분
+
+    df.to_excel('./result/{}Result.xlsx'.format(company_name), sheet_name='Sheet1', index=False)
