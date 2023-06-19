@@ -117,7 +117,7 @@ df = pd.read_excel('./target/houghton.xlsx', sheet_name='Sheet1')
 for index, row in df.iterrows():
     # Access the value in a column
     # Casting modified
-    accntCode = row['계정코드'] + ""
+    accntCode = str(row['계정코드'])
     compAccnt = row['회사계정']
     adminAccnt = predict(accntCode + " " + compAccnt)
     compAccnt = predict2(accntCode + " " + adminAccnt)
