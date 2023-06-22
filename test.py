@@ -42,8 +42,8 @@ args = parser.parse_args()
 model_company_admin = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=4950).to(device)
 model_admin_dis = BERTClassifier(bertmodel,  dr_rate=0.5, num_classes=375).to(device)
 
-model_company_admin.load_state_dict(torch.load("./train_results/cad4da_plain_company_admin_model.pt", map_location=device))
-model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_plain_admin_dis_model.pt", map_location=device))
+model_company_admin.load_state_dict(torch.load("./train_results/cad4da_company_admin_model.pt", map_location=device))
+model_admin_dis.load_state_dict(torch.load("./train_results/cad4da_admin_dis_model.pt", map_location=device))
 
 dataset_name = args.dataset
 company_name = args.company
@@ -139,8 +139,8 @@ if __name__ == '__main__':
         # Casting modified
         accntCode = str(row['계정코드'])                            # 계정코드
         compAccnt = row['1차번역']                                 # 회사계정
-        adminAccnt = predict(accntCode + " " + compAccnt)           # 관리계정
-        discAccnt = predict2(accntCode + " " + adminAccnt)          # 공시용계정 
+        adminAccnt = predict(compAccnt)           # 관리계정
+        discAccnt = predict2(adminAccnt)          # 공시용계정 
         ghbgAccnt = predict3(discAccnt)                             # 합산계정, 분류, 구분
 
         df.loc[index, '관리계정'] = adminAccnt
