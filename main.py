@@ -18,7 +18,7 @@ import pandas as pd
 # Recent
 from kobert_tokenizer import KoBERTTokenizer
 from transformers import BertModel
-
+ 
 from transformers import AdamW
 from transformers.optimization import get_cosine_schedule_with_warmup
 
@@ -45,13 +45,11 @@ bertmodel = BertModel.from_pretrained('skt/kobert-base-v1', return_dict=False)
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(
     tokenizer.vocab_file, padding_token='[PAD]')
 
-
 tok = tokenizer.tokenize
 
 # tok = tokenizer
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
 
 # 정확도 측정을 위한 함수 정의
 def calc_accuracy(X, Y):
@@ -59,7 +57,6 @@ def calc_accuracy(X, Y):
     train_acc = (max_indices == Y).sum().data.cpu().numpy() / \
         max_indices.size()[0]
     return train_acc
-
 
 def main(config):
     tm = localtime(time.time())
