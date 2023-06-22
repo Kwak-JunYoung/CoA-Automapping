@@ -68,7 +68,7 @@ def main(config):
     will_test = config.will_test
     print(f'preprocess_type: {preprocess_type}')
     data_path = './data/{}/{}_df.xlsx'.format(data_name, preprocess_type)
-
+    data_path = './data/{}/SamilCoA2023(3).xlsx'.format(data_name)
     train_config = config.train_config
 
     batch_size = train_config.batch_size
